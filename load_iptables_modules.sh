@@ -4,7 +4,7 @@ function checkModule(){
     echo "$MODULE is loaded"
   else
     echo "Loading $MODULE"
-    sudo modprobe $MODULE
+    modprobe $MODULE
   fi
 }
 
