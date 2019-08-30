@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: ip6tables
+  name: ip6tables
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ip6tables
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ip6tables
+        k8s-app: ip6tables
+    spec:
+      containers:
+      - env:
+        - name: "SLEEP"
+          value: "3600"
+        image: quay.io/mauilion/ip6tables:stable
+        imagePullPolicy: Always
+        name: ip6tables
+        resources:
+          limits:
+            cpu: 100m
+            memory: 50Mi
+          requests:
+            cpu: 100m
+            memory: 50Mi
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /lib/modules
+          name: lib-modules
+          readOnly: true
+      hostNetwork: true
+      volumes:
+      - hostPath:
+          path: /lib/modules
+        name: lib-modules
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      tolerations:
+      - operator: Exists
